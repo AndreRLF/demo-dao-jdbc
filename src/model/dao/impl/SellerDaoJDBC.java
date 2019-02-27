@@ -42,16 +42,8 @@ public class SellerDaoJDBC implements SellerDao{
             st.setInt(1, id);
             rs = st.executeQuery();
             if (rs.next()){
-                Department dep = new Department();
-                dep.setId(rs.getInt("DepartmentID"));
-                dep.setName(rs.getString("DepName"));
-                Seller obj = new Seller();
-                obj.setId(rs.getInt("Id"));
-                obj.setName(rs.getString("Name"));
-                obj.setEmail(rs.getString("Email"));
-                obj.setBaseSallary(rs.getDouble("BaseSalary"));
-                obj.setBithDate(rs.getDate("BirthDate"));
-                obj.setDepartment(dep);
+                Department dep = instanciateDepartment(rs);
+                Seller obj = insganciateSeller(rs, dep);
                 return obj;
             }
             return null;
@@ -71,6 +63,24 @@ public class SellerDaoJDBC implements SellerDao{
     @Override
     public List<Seller> findALL() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private Department instanciateDepartment(ResultSet rs) throws SQLException {
+        Department dep = new Department();
+        dep.setId(rs.getInt("DepartmentID"));
+        dep.setName(rs.getString("DepName"));
+        return dep;
+    }
+
+    private Seller insganciateSeller(ResultSet rs, Department dep) throws SQLException {
+        Seller obj = new Seller();
+        obj.setId(rs.getInt("Id"));
+        obj.setName(rs.getString("Name"));
+        obj.setEmail(rs.getString("Email"));
+        obj.setBaseSallary(rs.getDouble("BaseSalary"));
+        obj.setBithDate(rs.getDate("BirthDate"));
+        obj.setDepartment(dep);
+        return obj;
     }
     
 }
